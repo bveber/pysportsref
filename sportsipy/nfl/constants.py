@@ -80,6 +80,7 @@ BOXSCORE_SCHEME = {
     'game_details': 'table#game_info tr',
     'home_name': 'div[class="linescore_wrap"] table tbody tr:last td:nth-child(2)',
     'summary': 'table[class="linescore nohover stats_table no_freeze"]:first',
+    'scoring': 'table[class="stats_table"]:first',
     'team_stats': 'table#team_stats thead',
     'away_name': 'div[class="linescore_wrap"] table tbody tr:first td:nth-child(2)',
     'away_points': 'div[class="scorebox"] div[class="score"]',

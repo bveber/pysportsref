@@ -238,6 +238,7 @@ class Boxscore:
         self._losing_name = None
         self._losing_abbr = None
         self._summary = None
+        self._scoring = None
         self._won_toss = None
         self._roof = None
         self._surface = None
@@ -490,6 +491,53 @@ class Boxscore:
                 except ValueError:
                     summary[team[ind]].append(None)
         return summary
+
+    def _parse_scoring(self, boxscore): 
+        """
+        Find the details of the game's scorig possessions.
+
+        The game scoring info includes details on every scoring possession
+        split by quarters with details on the players involved in the 
+        possession and the game score after the scoring play. The final output 
+        will be a list of lists, where each sub-list will hold all scoring 
+        possessions in it's quarter: 0-1st, 1-2nd, 2-3rd, 3-4th, 4-overtime.
+        Each score will be represented with a dictionary with the keys:
+            'time' - Time on the clock until the end of the quarter.
+            'team' - The scoring team's name.
+            'details' - A summary of the scoring play,
+                        including players involved.
+            'current_score' - A dictionary with the current score after the 
+                            scoring play. It's keys are: 'home', 'away'.
+        
+        Parameters
+        ----------
+        boxscore : PyQuery object
+            A PyQuery object containing all of the HTML from the boxscore.
+
+        Returns
+        -------
+        list
+            Returns a ``list`` containing a list for each quarter's scores. 
+            Each score is represented by a "dictionary" which holds the details
+            on each score.
+        """
+        scoring = [[], [], [], [], []] 
+        game_scoring = boxscore(BOXSCORE_SCHEME['scoring'])
+
+        for score_info in game_scoring('tbody tr').items(): 
+            if score_info('th[data-stat="quarter"]').text().isnumeric():
+                quarter = int(score_info('th[data-stat="quarter"]').text())
+            score = {}
+            score['time'] = score_info('td[data-stat="time"]').text()
+            score['team'] = score_info('td[data-stat="team"]').text()
+            score['details'] = score_info('td[data-stat="description"]').text()
+            current_score = {}
+            current_score['away'] = score_info('td[data-stat="vis_team_score"]').text() 
+            current_score['home'] = score_info('td[data-stat="home_team_score"]').text()
+            score['current_score'] = current_score
+            scoring[quarter-1].append(score)
+            print(scoring)
+        return scoring
 
     def _find_boxscore_tables(self, boxscore):
         """
@@ -788,6 +836,10 @@ class Boxscore:
                 value = self._parse_summary(boxscore)
                 setattr(self, field, value)
                 continue
+            if short_field == 'scoring':
+                value = self._parse_scoring(boxscore)
+                setattr(self, field, value)
+                continue
             index = 0
             if short_field in BOXSCORE_ELEMENT_INDEX.keys():
                 index = BOXSCORE_ELEMENT_INDEX[short_field]
@@ -1022,6 +1074,39 @@ class Boxscore:
         }
         """
         return self._summary
+
+    @property
+    def scoring(self):
+        """
+        Returns a "list" containing a list for each quarter's scores. Each
+        score is represented by a "dictionary" that holds the following keys:
+            'time' - Time on the clock until the end of the quarter.
+            'team' - The scoring team's name.
+            'details' - A summary of the scoring play,
+                        including players involved.
+            'current_score' - A dictionary with the current score after the 
+                            scoring play. It's keys are: 'home', 'away'.
+        For example:
+        
+        [
+            [<1st-quarter-scores>], [<2nd-quarter-scores>], 
+            [<3rd-quarter-scores>], [<4th-quarter-scores>],
+            [<overtime-scores>] 
+        ]
+
+        Example for <1st-quarter-scores>:
+            
+            [
+                {
+                    'time': '7:51',
+                    'team': 'Giants', 
+                    'details': 'Lawrence Cager 9 yard pass from Daniel Jones
+                      (Graham Gano kick)',
+                    'current_score': {'away': '0', 'home': '7'}
+                }
+            ]
+        """
+        return self._scoring
 
     @property
     def winner(self):
