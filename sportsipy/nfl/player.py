@@ -4,8 +4,8 @@ from functools import wraps
 from lxml.etree import ParserError, XMLSyntaxError
 from pyquery import PyQuery as pq
 from urllib.error import HTTPError
-from .. import utils
-from .constants import PLAYER_SCHEME, PLAYER_URL, ROSTER_URL
+import utils
+from constants import PLAYER_SCHEME, PLAYER_URL, ROSTER_URL
 
 
 def _cleanup(prop):

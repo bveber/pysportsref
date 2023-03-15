@@ -1,6 +1,6 @@
 import pandas as pd
 import re
-from .constants import (CONF_CHAMPIONSHIP,
+from constants import (CONF_CHAMPIONSHIP,
                         DIVISION,
                         LOST_CONF_CHAMPS,
                         LOST_DIVISIONAL,
@@ -10,12 +10,12 @@ from .constants import (CONF_CHAMPIONSHIP,
                         SUPER_BOWL,
                         WILD_CARD,
                         WON_SUPER_BOWL)
-from ..constants import LOSS, WIN
-from ..decorators import float_property_decorator, int_property_decorator
-from .. import utils
-from .nfl_utils import _retrieve_all_teams
-from .roster import Roster
-from .schedule import Schedule
+from sportsipy.constants import LOSS, WIN
+from sportsipy.decorators import float_property_decorator, int_property_decorator
+import utils
+from nfl_utils import _retrieve_all_teams
+from roster import Roster
+from schedule import Schedule
 
 
 class Team:

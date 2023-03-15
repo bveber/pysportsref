@@ -25,6 +25,7 @@ SEASON_START_MONTH = {
 }
 
 def _rate_limit_pq(pq_input, sleep=3.5):
+    time.sleep(sleep)
     ret = pq(pq_input)
     time.sleep(sleep)
     return ret

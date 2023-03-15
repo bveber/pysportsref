@@ -3,15 +3,15 @@ import re
 from datetime import datetime
 from pyquery import PyQuery as pq
 from urllib.error import HTTPError
-from .. import utils
-from ..constants import AWAY, HOME
-from ..decorators import int_property_decorator
-from .constants import (BOXSCORE_ELEMENT_INDEX,
+import utils
+from sportsipy.constants import HOME, AWAY
+from sportsipy.decorators import int_property_decorator
+from constants import (BOXSCORE_ELEMENT_INDEX,
                         BOXSCORE_ELEMENT_SUB_INDEX,
                         BOXSCORE_SCHEME,
                         BOXSCORE_URL,
                         BOXSCORES_URL)
-from .player import (AbstractPlayer,
+from player import (AbstractPlayer,
                      _float_property_decorator,
                      _int_property_decorator)
 from functools import wraps
