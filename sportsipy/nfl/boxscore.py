@@ -536,7 +536,7 @@ class Boxscore:
             current_score['home'] = score_info('td[data-stat="home_team_score"]').text()
             score['current_score'] = current_score
             scoring[quarter-1].append(score)
-            print(scoring)
+#        print(scoring)
         return scoring
 
     def _find_boxscore_tables(self, boxscore):

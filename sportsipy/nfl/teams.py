@@ -134,6 +134,7 @@ class Team:
         """
         team_data_dict, year = _retrieve_all_teams(year, season_page)
         self._year = year
+
         team_data = team_data_dict[team_name]['data']
         self._rank = team_data_dict[team_name]['rank']
         return team_data

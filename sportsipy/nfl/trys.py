@@ -93,11 +93,28 @@ ttt = Team('KAN')
 
 
 
-
-check_game = GameData('202302120phi', 'PHI', 'KAN')
-
+houston_schedule = Team('HTX')
 print(check_game._gameValue)
 
-"""
+boxscore1 = Boxscore('202209150kan')
+print(boxscore1.home_abbreviation)
 
-houston_schedule = Schedule('HTX')
+check_game = GameData('202209150kan', 'LAC', 'KAN')
+print(check_game._gameValue)
+
+
+check_game = GameData('202209150kan', 'KAN', 'SDG')
+print(check_game._gameValue)
+boxscore1 = Boxscore('202209150kan')
+print(int(boxscore1.scoring[3][-1]['current_score']['away']))
+check_game = GameData('202209150kan')
+print(check_game._gameValue)
+boxscore1 = Boxscore('202209150kan')
+print(boxscore1.winning_abbr)
+print(boxscore1.losing_abbr)
+
+"""
+boxscore1 = Boxscore('202209150kan')
+print(boxscore1._alt_abbreviations)
+print(boxscore1.home_abbreviation)
+
