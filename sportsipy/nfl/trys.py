@@ -106,6 +106,7 @@ print(check_game._gameValue)
 check_game = GameData('202209150kan', 'KAN', 'SDG')
 print(check_game._gameValue)
 boxscore1 = Boxscore('202209150kan')
+
 print(int(boxscore1.scoring[3][-1]['current_score']['away']))
 check_game = GameData('202209150kan')
 print(check_game._gameValue)
