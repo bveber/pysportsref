@@ -34,6 +34,9 @@ class GameData:
         #self._game = Game(game_data, game_type, year) - game_data = None, game_type= None, year= None
         self._winningTeam = Team(self._boxscore.winning_abbr)
         self._losingTeam = Team(self._boxscore.losing_abbr)
+        self._altTeam1Name, self._altTeam2Name = self._boxscore._alt_abbreviations(self._boxscore._retrieve_html_page(boxscoreString))
+        self._awayTeam = Team(self._boxscore.away_abbreviation.upper())
+        self._homeTeam = Team(self._boxscore.home_abbreviation.upper())
         self._gameValue = None
         self._gameSummery = None
         self._homePoints = None
@@ -99,13 +102,13 @@ class GameData:
         isTeam2Playoff = False
         df_list = pd.read_html(url)
         for i in range(0,len(df_list[1]['Tm'])):
-            if ((self._winningTeam.abbreviation == df_list[1]['Tm'][i][0:3]) and ((i % 5 == 1) or ('*' == df_list[1]['Tm'][i][3]))) or ((self._winningTeam.abbreviation == df_list[1]['Tm'][i][0:3]) and ( (self._winningTeam.rank <=13 ) or ('+' == df_list[1]['Tm'][i][3]))):
+            if ((self._altTeam1Name == df_list[1]['Tm'][i][0:3]) and ((i % 5 == 1) or ('*' == df_list[1]['Tm'][i][3]))) or ((self._altTeam1Name == df_list[1]['Tm'][i][0:3]) and ( (self._awayTeam.rank <=13 ) or ('+' == df_list[1]['Tm'][i][3]))):
                 isTeam1Playoff = True
-            if ((self._winningTeam.abbreviation == df_list[0]['Tm'][i][0:3]) and ((i % 5 == 1) or ('*' == df_list[0]['Tm'][i][3]))) or ((self._winningTeam.abbreviation == df_list[0]['Tm'][i][0:3]) and ( (self._winningTeam.rank <=13 ) or ('+' == df_list[0]['Tm'][i][3]))):
+            if ((self._altTeam1Name == df_list[0]['Tm'][i][0:3]) and ((i % 5 == 1) or ('*' == df_list[0]['Tm'][i][3]))) or ((self._altTeam1Name == df_list[0]['Tm'][i][0:3]) and ( (self._awayTeam.rank <=13 ) or ('+' == df_list[0]['Tm'][i][3]))):
                 isTeam1Playoff = True
-            if ((self._losingTeam.abbreviation == df_list[1]['Tm'][i][0:3]) and ((i % 5 == 1) or ('*' == df_list[1]['Tm'][i][3]))) or ((self._losingTeam.abbreviation == df_list[1]['Tm'][i][0:3]) and ( (self._losingTeam.rank <=13 ) or ('+' == df_list[1]['Tm'][i][3]))):
+            if ((self._altTeam2Name == df_list[1]['Tm'][i][0:3]) and ((i % 5 == 1) or ('*' == df_list[1]['Tm'][i][3]))) or ((self._altTeam2Name == df_list[1]['Tm'][i][0:3]) and ( (self._homeTeam.rank <=13 ) or ('+' == df_list[1]['Tm'][i][3]))):
                 isTeam2Playoff = True
-            if ((self._losingTeam.abbreviation == df_list[0]['Tm'][i][0:3]) and ((i % 5 == 1) or ('*' == df_list[0]['Tm'][i][3]))) or ((self._losingTeam.abbreviation == df_list[0]['Tm'][i][0:3]) and ( (self._losingTeam.rank <=13 ) or ('+' == df_list[0]['Tm'][i][3]))):
+            if ((self._altTeam2Name == df_list[0]['Tm'][i][0:3]) and ((i % 5 == 1) or ('*' == df_list[0]['Tm'][i][3]))) or ((self._altTeam2Name == df_list[0]['Tm'][i][0:3]) and ( (self._homeTeam.rank <=13 ) or ('+' == df_list[0]['Tm'][i][3]))):
                 isTeam2Playoff = True
         return isTeam1Playoff, isTeam2Playoff
 
@@ -115,9 +118,9 @@ class GameData:
         teamTwoConf = 'AFC'
         df_list = pd.read_html(url)
         for i in range(0,len(df_list[1]['Tm'])):
-            if self._winningTeam.abbreviation == df_list[1]['Tm'][i][0:3]:
+            if self._altTeam2Name == df_list[1]['Tm'][i][0:3]:
                 teamOneConf = 'NFC'
-            if self._losingTeam.abbreviation == df_list[1]['Tm'][i][0:3]:
+            if self._altTeam2Name == df_list[1]['Tm'][i][0:3]:
                 teamOneConf = 'NFC'
         return teamOneConf, teamTwoConf
     
