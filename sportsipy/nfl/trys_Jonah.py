@@ -9,12 +9,11 @@ import time
 import pandas as pd
 
 
-check_game = GameData('202209150kan')
+check_game = GameData('202301150min')
 print(check_game._gameValue)
 
 """
 ------------------------------Gamas Checked------------------------------
-
-
+202301150min
 
 """
