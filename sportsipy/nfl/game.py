@@ -118,10 +118,10 @@ class GameData:
         teamTwoConf = 'AFC'
         df_list = pd.read_html(url)
         for i in range(0,len(df_list[1]['Tm'])):
-            if self._altTeam2Name == df_list[1]['Tm'][i][0:3]:
+            if self._altTeam1Name == df_list[1]['Tm'][i][0:3]:
                 teamOneConf = 'NFC'
             if self._altTeam2Name == df_list[1]['Tm'][i][0:3]:
-                teamOneConf = 'NFC'
+                teamTwoConf = 'NFC'
         return teamOneConf, teamTwoConf
     
 
