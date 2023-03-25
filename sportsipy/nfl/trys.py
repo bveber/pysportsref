@@ -10,7 +10,7 @@ import time
 import pandas as pd
 
 
-
+MAIN_URL = 'https://www.pro-football-reference.com'
 """
 kan_roster = Roster('KAN')
 print(kan_roster.players)
@@ -136,9 +136,15 @@ print(boxscore1.winning_abbr)
 print(boxscore1.losing_abbr)
 print(boxscore1.home_abbreviation.upper())
 print(boxscore1.away_abbreviation.upper())
-"""
-
-
-check_game = GameData('202209150kan')
+check_game = GameData('202212040nyg')
 print(check_game._gameValue)
 
+
+url = MAIN_URL
+df_list = pd.read_html(url)
+for i in range(0,len(df_list[1]['Tm'])):
+        print(df_list[1]['Tm'][i][-1])
+"""
+
+check_game = GameData('202212040nyg')
+print(check_game._gameValue)

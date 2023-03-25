@@ -102,13 +102,13 @@ class GameData:
         isTeam2Playoff = False
         df_list = pd.read_html(url)
         for i in range(0,len(df_list[1]['Tm'])):
-            if ((self._altTeam1Name == df_list[1]['Tm'][i][0:3]) and ((i % 5 == 1) or ('*' == df_list[1]['Tm'][i][3]))) or ((self._altTeam1Name == df_list[1]['Tm'][i][0:3]) and ( (self._awayTeam.rank <=13 ) or ('+' == df_list[1]['Tm'][i][3]))):
+            if ((self._altTeam1Name == df_list[1]['Tm'][i][0:3]) and ((i % 5 == 1) or ('*' == df_list[1]['Tm'][i][-1]))) or ((self._altTeam1Name == df_list[1]['Tm'][i][0:3]) and ( (self._awayTeam.rank <=13 ) or ('+' == df_list[1]['Tm'][i][-1]))):
                 isTeam1Playoff = True
-            if ((self._altTeam1Name == df_list[0]['Tm'][i][0:3]) and ((i % 5 == 1) or ('*' == df_list[0]['Tm'][i][3]))) or ((self._altTeam1Name == df_list[0]['Tm'][i][0:3]) and ( (self._awayTeam.rank <=13 ) or ('+' == df_list[0]['Tm'][i][3]))):
+            if ((self._altTeam1Name == df_list[0]['Tm'][i][0:3]) and ((i % 5 == 1) or ('*' == df_list[0]['Tm'][i][-1]))) or ((self._altTeam1Name == df_list[0]['Tm'][i][0:3]) and ( (self._awayTeam.rank <=13 ) or ('+' == df_list[0]['Tm'][i][-1]))):
                 isTeam1Playoff = True
-            if ((self._altTeam2Name == df_list[1]['Tm'][i][0:3]) and ((i % 5 == 1) or ('*' == df_list[1]['Tm'][i][3]))) or ((self._altTeam2Name == df_list[1]['Tm'][i][0:3]) and ( (self._homeTeam.rank <=13 ) or ('+' == df_list[1]['Tm'][i][3]))):
+            if ((self._altTeam2Name == df_list[1]['Tm'][i][0:3]) and ((i % 5 == 1) or ('*' == df_list[1]['Tm'][i][-1]))) or ((self._altTeam2Name == df_list[1]['Tm'][i][0:3]) and ( (self._homeTeam.rank <=13 ) or ('+' == df_list[1]['Tm'][i][-1]))):
                 isTeam2Playoff = True
-            if ((self._altTeam2Name == df_list[0]['Tm'][i][0:3]) and ((i % 5 == 1) or ('*' == df_list[0]['Tm'][i][3]))) or ((self._altTeam2Name == df_list[0]['Tm'][i][0:3]) and ( (self._homeTeam.rank <=13 ) or ('+' == df_list[0]['Tm'][i][3]))):
+            if ((self._altTeam2Name == df_list[0]['Tm'][i][0:3]) and ((i % 5 == 1) or ('*' == df_list[0]['Tm'][i][-1]))) or ((self._altTeam2Name == df_list[0]['Tm'][i][0:3]) and ( (self._homeTeam.rank <=13 ) or ('+' == df_list[0]['Tm'][i][-1]))):
                 isTeam2Playoff = True
         return isTeam1Playoff, isTeam2Playoff
 
@@ -151,7 +151,9 @@ class GameData:
 
 
         "first parameter"
-        if (self._totalPoints / self._diffPoints) >= 6:
+        if(self._diffPoints == 0):
+            self.firstValue = 2.0
+        elif (self._totalPoints / self._diffPoints) >= 6:
             self.firstValue = 2.0
         
         "second parameter"
