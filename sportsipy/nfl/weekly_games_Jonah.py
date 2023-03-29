@@ -81,3 +81,9 @@ def if_worth_watching(boxscore):
     if check_game >= 5:
         return True
     return False
+
+
+games = WeeklyGames()
+print(games.worth_watching_week)
+print("-------------------------------------------------")
+print(games.worth_watching_last)
