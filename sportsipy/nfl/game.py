@@ -24,8 +24,11 @@ class GameData:
     Furtermore, the game will add in the future additional information about the game and will calculate the 'Value' of the game according to the Parameters the game checks out.
     """
 
-    def __init__(self, boxscoreString):
-        self._boxscore = Boxscore(boxscoreString)
+    def __init__(self, boxscoreString, game_box_score=None):
+        if (game_box_score is None):
+            self._boxscore = Boxscore(boxscoreString)
+        else:
+            self._boxscore = game_box_score
         team_name1 = self._boxscore.winning_abbr
         team_schedule = Schedule(team_name1)
         for game in team_schedule:
