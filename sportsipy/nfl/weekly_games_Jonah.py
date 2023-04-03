@@ -9,8 +9,8 @@ class WeeklyGames:
 
     def __init__(self):
         self.weekly_boxscores = []
-        self.last_days_boxscores = []
-        self.worth_watching_last = []
+        # self.last_days_boxscores = []
+        # self.worth_watching_last = []
         self.worth_watching_week = []
         self.today_date = datetime.date.today()
         self._get_week_boxscores()
@@ -19,32 +19,41 @@ class WeeklyGames:
     def _get_week_boxscores(self):
         """Returns the boxscores from all the games in the past week"""
         # TODO - add scrapping to get current week number from https://www.pro-football-reference.com/boxscores/
-        games = Boxscores(15, 2022).games  # TODO - base on [today_date]
+        games = Boxscores(10, 2022).games  # TODO - base on [today_date]
         for week in games:
             self.weekly_boxscores = boxscores_from_games(games[week])
-            self._get_last_games(games[week])
+            # self._get_last_games(games[week])
 
+    """
     # TODO - add usage back to code
     def _get_last_games(self, week_games):
-        """return only the games from the past day of games out of past week"""
+        # return only the games from the past day of games out of past week
         latest_date = max([game.datetime for game in week_games])
         last_games = [game for game in week_games if game.datetime == latest_date]
         self.last_days_boxscores = boxscores_from_games(last_games)
+    """
 
     def _get_worth_watching(self):
         """Returns a list of strings with the games worth watching"""
+        i = 0  # TODO - remove
         for boxscore in self.weekly_boxscores:
-            # TODO - change to full ALGO!!!
+            print(i)
+            i += 1
+            home, away = get_team_names(boxscore) # TODO - for test, remove
+            print(print_teams(home, away)) # TODO - for test, remove
+            print(boxscore._uri)
             if (if_worth_watching(boxscore)):
                 home, away = get_team_names(boxscore)
                 self.worth_watching_week.append(print_teams(home, away))
                 # print(self.print_teams(home, away))
+        """
         for boxscore in self.last_days_boxscores:
             # TODO - change to full ALGO!!!
             if (if_worth_watching(boxscore)):
                 home, away = get_team_names(boxscore)
                 self.worth_watching_last.append(print_teams(home, away))
                 # print(self.print_teams(home, away))
+        """
 
 
 def boxscores_from_games(games):
@@ -74,10 +83,13 @@ def print_teams(home, away):
     """Returns string with team for email"""
     return (home + " - " + away)
 
+
 def if_worth_watching(boxscore):
     """Checks if the game is worth watching based on it's boxscore"""
-    print(boxscore.scoring)
-    check_game = GameData('', boxscore)
+    # print(boxscore.scoring)
+    print('check boxscore')  # has boxscore info..
+    check_game = GameData('', boxscore)._gameValue
+    print(check_game)
     if check_game >= 5:
         return True
     return False
@@ -86,4 +98,4 @@ def if_worth_watching(boxscore):
 games = WeeklyGames()
 print(games.worth_watching_week)
 print("-------------------------------------------------")
-print(games.worth_watching_last)
+# print(games.worth_watching_last)

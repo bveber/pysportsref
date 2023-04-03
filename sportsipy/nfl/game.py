@@ -31,7 +31,9 @@ class GameData:
             self._boxscore = game_box_score
         team_name1 = self._boxscore.winning_abbr
         team_schedule = Schedule(team_name1)
-        for game in team_schedule:
+        if (boxscoreString is not None):
+            boxscoreString = self._boxscore._uri
+        for game in team_schedule:  # Jonah - is this the most efficient way to get the game?
             if game.boxscore_index == boxscoreString:
                 self._game = game
         #self._game = Game(game_data, game_type, year) - game_data = None, game_type= None, year= None
@@ -203,6 +205,7 @@ class GameData:
         if(self._diffMinPoss / self._totalMinPoss) <= 0.05:
             self.twelthValue = 1.0
         
+        # Jonah - change accesible values like _gameValue to be public (without _)
         self._gameValue = self.firstValue + self.secondValue + self.thirdValue + self.forthValue + self.fifthValue + self.sixthValue + self.seventhValue + self.eightValue + self.ninthValue + self.tenthValue + self.eleventhValue + self.twelthValue
         
 
