@@ -1,10 +1,12 @@
 from player import AbstractPlayer
-from boxscore import Boxscore
+from boxscore import Boxscore, BoxscorePlayer
 from boxscore import Boxscores
 from roster import Roster
 from teams import Team
 from schedule import Schedule, Game
 from game import GameData
+from constants import PARSING_SCHEME
+from sportsipy import utils
 
 import time
 import pandas as pd
@@ -144,7 +146,30 @@ url = MAIN_URL
 df_list = pd.read_html(url)
 for i in range(0,len(df_list[1]['Tm'])):
         print(df_list[1]['Tm'][i][-1])
-"""
+
 
 check_game = GameData('202212040nyg')
 print(check_game._gameValue)
+
+
+
+url = MAIN_URL
+df_list = pd.read_html(url)
+for i in range(0,len(df_list[1]['Tm'])):
+    print(PARSING_SCHEME['NFC Team'].text())
+
+    check_game = Boxscore('202209180rai')
+team_name1 = check_game._retrieve_html_page('202209180rai')
+team_name2 = check_game._parse_players_stats(team_name1)
+for player in team_name2:
+    print(player['receiving yards'])
+"""
+check_game = Boxscore('202209180rai')
+team_name1 = check_game._retrieve_html_page('202209180rai')
+team_name2 = team_name1('table[class="sortable stats_table"]').eq(1)
+counter = 1
+for score_info in team_name2('tbody tr').items():
+    if(score_info('th[data-stat="player"]').text() != 'Player' and score_info('th[data-stat="player"]').text() != ''):
+        print(counter)
+        counter+=1
+        print(score_info('th[data-stat="rec_yds"]').text())

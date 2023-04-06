@@ -491,6 +491,76 @@ class Boxscore:
                 except ValueError:
                     summary[team[ind]].append(None)
         return summary
+    
+    def _parse_players_stats(self, boxscore): 
+
+        """    
+        Find the details of the Passing, Rushing, & Receiving stats of the players in the game.
+
+        The info includes details on every player stats and rating (for some) in the game
+        stats are for the entire game and contains details on the players involved in the 
+        game. The final output will be a list of lists, where each sub-list will hold each player's all
+        stats in game (Yards, Passes, Interceptions..)
+        all stats are devided by roll of player - Passing, Rushing and Receiving
+        Each stats will be represented with a dictionary with the keys:
+            'Passing' - Time on the clock until the end of the quarter.
+            'team' - The scoring team's name.
+            'details' - A summary of the scoring play,
+                        including players involved.
+            'current_score' - A dictionary with the current score after the 
+                            scoring play. It's keys are: 'home', 'away'.
+        
+        Parameters
+        ----------
+        boxscore : PyQuery object
+            A PyQuery object containing all of the HTML from the boxscore.
+
+        Returns
+        -------
+        list
+            Returns a ``list`` containing a list for each player's stats. 
+            Each player is represented by a "dictionary" which holds his details
+            on each score.
+        
+        """
+    
+        #first part - create the exact number of columns for the players in the game
+        players_stats = []
+        counter_players = 0
+        game_players_stats = boxscore(BOXSCORE_SCHEME['player_stats']).eq(1)
+        for player_column in game_players_stats('tbody tr').items():
+            player_name = player_column('th[data-stat="player"]').text() 
+            if( player_name != 'Player' and player_name != ''):
+                player = {}
+                player['player'] = player_column('th[data-stat="player"]').text()
+                player['team'] = player_column('th[data-stat="team"]').text()
+                player['passes completed'] = player_column('th[data-stat="pass_cmp"]').text()
+                player['passes attempted'] = player_column('th[data-stat="pass_att"]').text()
+                player['yards by passing'] = player_column('th[data-stat="pass_yds"]').text()
+                player['passing touchdowns'] = player_column('th[data-stat="pass_td"]').text()
+                player['interceptions thrown'] = player_column('th[data-stat="pass_int"]').text()
+                player['times sacked'] = player_column('th[data-stat="pass_sacked"]').text()
+                player['yards lost by sacked'] = player_column('th[data-stat="pass_sacked_yds"]').text()
+                player['longest completed pass'] = player_column('th[data-stat="pass_long"]').text()
+                player['yards lost by sacked'] = player_column('th[data-stat="pass_sacked_yds"]').text()
+                player['quarterback rating'] = player_column('th[data-stat="pass_rating"]').text()
+                player['rushing attempts'] = player_column('th[data-stat="rush_att"]').text()
+                player['rushing yards'] = player_column('th[data-stat="rush_yds"]').text()
+                player['rushing touchdown'] = player_column('th[data-stat="rush_td"]').text()
+                player['longest rushing attempt'] = player_column('th[data-stat="rush_long"]').text()
+                player['pass targets'] = player_column('th[data-stat="targets"]').text()
+                player['receptions'] = player_column('th[data-stat="rec"]').text()
+                player['receiving yards'] = player_column('th[data-stat="rec_yds"]').text()
+                player['receiving touchdown'] = player_column('th[data-stat="rec_td"]').text()
+                player['longest receptions'] = player_column('th[data-stat="rec_long"]').text()
+                player['fumbles and taken by own team'] = player_column('th[data-stat="fumbles"]').text()
+                player['fumbles and taken by own team'] = player_column('th[data-stat="fumbles_lost"]').text()
+
+                players_stats.append(player)
+                counter_players += 1
+#        print(game_players_stats)
+        return players_stats
+
 
     def _parse_scoring(self, boxscore): 
         """
@@ -538,7 +608,8 @@ class Boxscore:
             scoring[quarter-1].append(score)
 #        print(scoring)
         return scoring
-
+    
+    
     def _find_boxscore_tables(self, boxscore):
         """
         Find all tables with boxscore information on the page.
@@ -1898,3 +1969,7 @@ class Boxscores:
             timestamp = '%s-%s' % (week, year)
             self._boxscores[timestamp] = boxscores
             week += 1
+
+
+
+
