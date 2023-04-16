@@ -77,7 +77,7 @@ class GameData:
         self.ninthValue = 0.0
         self.tenthValue = 0.0
         self.eleventhValue = 0.0
-        self.twelthValue = 0.0
+        self.twelfthValue = 0.0
 
         self._setGameValue()
 
@@ -212,11 +212,11 @@ class GameData:
         if(self._quarterback_rating_max >= 75):
              self.eleventhValue = 2.0
 
-        "Twolth parameter"
+        "Twelfth parameter"
         if(self._diffMinPoss / self._totalMinPoss) <= 0.05:
-            self.twelthValue = 1.0
+            self.twelfthValue = 1.0
         
-        self.gameValue = self.firstValue + self.secondValue + self.thirdValue + self.fourthValue + self.fifthValue + self.sixthValue + self.seventhValue + self.eighthValue + self.ninthValue + self.tenthValue + self.eleventhValue + self.twelthValue
+        self.gameValue = self.firstValue + self.secondValue + self.thirdValue + self.fourthValue + self.fifthValue + self.sixthValue + self.seventhValue + self.eighthValue + self.ninthValue + self.tenthValue + self.eleventhValue + self.twelfthValue
 
 
 """

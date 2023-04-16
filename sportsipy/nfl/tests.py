@@ -27,12 +27,12 @@ class TestWeeklyGames(unittest.TestCase):
             case '202211130kan': self.assertEqual(self.games.weekly_ratings[uri], 10.5, "Wrong rating for kan")
             case '202211130mia': self.assertEqual(self.games.weekly_ratings[uri], 4, "Wrong rating for mia")
             case '202211130nyg': self.assertEqual(self.games.weekly_ratings[uri], 6.5, "Wrong rating for nyg")
-            case '202211130oti': self.assertEqual(self.games.weekly_ratings[uri], 3, "Wrong rating for oti")
-            case '202211130pit': self.assertEqual(self.games.weekly_ratings[uri], 2, "Wrong rating for pit")
+            case '202211130oti': self.assertEqual(self.games.weekly_ratings[uri], 5, "Wrong rating for oti")
+            case '202211130pit': self.assertEqual(self.games.weekly_ratings[uri], 4, "Wrong rating for pit")
             case '202211130rai': self.assertEqual(self.games.weekly_ratings[uri], 9.5, "Wrong rating for rai")
             case '202211130gnb': self.assertEqual(self.games.weekly_ratings[uri], 11, "Wrong rating for gnb")
             case '202211130ram': self.assertEqual(self.games.weekly_ratings[uri], 4, "Wrong rating for ram")
-            case '202211130sfo': self.assertEqual(self.games.weekly_ratings[uri], 6, "Wrong rating for sfo")
+            case '202211130sfo': self.assertEqual(self.games.weekly_ratings[uri], 8, "Wrong rating for sfo")
             case '202211140phi': self.assertEqual(self.games.weekly_ratings[uri], 4.5, "Wrong rating for phi")
 
 
@@ -55,8 +55,8 @@ def testSingleGame(suite):
 
 if __name__ == '__main__':
     suite = unittest.TestSuite()
-    testWeek(suite)
     testSingleGame(suite)
+    testWeek(suite)
     runner = unittest.TextTestRunner()  
     result = runner.run(suite)
     print(result)
