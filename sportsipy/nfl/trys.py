@@ -4,7 +4,7 @@ from boxscore import Boxscores
 from roster import Roster
 from teams import Team
 from schedule import Schedule, Game
-from game import GameData
+#from game import GameData
 from constants import PARSING_SCHEME
 from sportsipy import utils
 
@@ -158,18 +158,29 @@ df_list = pd.read_html(url)
 for i in range(0,len(df_list[1]['Tm'])):
     print(PARSING_SCHEME['NFC Team'].text())
 
-    check_game = Boxscore('202209180rai')
-team_name1 = check_game._retrieve_html_page('202209180rai')
-team_name2 = check_game._parse_players_stats(team_name1)
-for player in team_name2:
-    print(player['receiving yards'])
-"""
-check_game = Boxscore('202209180rai')
+
+ check_game = Boxscore('202209180rai')
 team_name1 = check_game._retrieve_html_page('202209180rai')
 team_name2 = team_name1('table[class="sortable stats_table"]').eq(1)
 counter = 1
 for score_info in team_name2('tbody tr').items():
     if(score_info('th[data-stat="player"]').text() != 'Player' and score_info('th[data-stat="player"]').text() != ''):
-        print(counter)
         counter+=1
-        print(score_info('th[data-stat="rec_yds"]').text())
+        print(score_info('td[data-stat="rec_yds"]').text())   
+
+
+check_game = Boxscore('202209180rai')
+team_name1 = check_game._retrieve_html_page('202209180rai')
+team_name2 = check_game._parse_players_stats(team_name1)
+for player in team_name2:
+    print(player['quarterback rating'])
+"""
+maxRating = 0
+check_game = Boxscore('202209180rai')
+team_name1 = check_game._retrieve_html_page('202209180rai')
+team_name2 = check_game._parse_players_stats(team_name1)
+for player in team_name2:
+            if(player['quarterback rating']) and float(player['quarterback rating']) > maxRating:
+                maxRating = float(player['quarterback rating'])
+
+print(maxRating)

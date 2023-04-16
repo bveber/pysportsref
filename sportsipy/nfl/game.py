@@ -33,7 +33,7 @@ class GameData:
         team_schedule = Schedule(team_name1)
         if (boxscoreString is not None):
             boxscoreString = self._boxscore._uri
-        for game in team_schedule:  # Jonah - is this the most efficient way to get the game?
+        for game in team_schedule:  # Jonah - is this the most efficient way to get the game? -EDEN: unfortunatly, yes ( absulotly we need to find another way)
             if game.boxscore_index == boxscoreString:
                 self._game = game
         #self._game = Game(game_data, game_type, year) - game_data = None, game_type= None, year= None
@@ -42,7 +42,8 @@ class GameData:
         self._altTeam1Name, self._altTeam2Name = self._boxscore._alt_abbreviations(self._boxscore._retrieve_html_page(boxscoreString))
         self._awayTeam = Team(self._boxscore.away_abbreviation.upper())
         self._homeTeam = Team(self._boxscore.home_abbreviation.upper())
-        self._gameValue = None
+        self._pyQuaryGame = self._boxscore._retrieve_html_page(self._boxscore._uri)
+        self.gameValue = None
         self._gameSummery = None
         self._homePoints = None
         self._awayPoints = None
@@ -57,6 +58,7 @@ class GameData:
         self._isTeamOnePlayoffs = None
         self._isTeamTwoPlayoffs = None
         self._percentageDiff = None
+        self._quarterback_rating_max = None
         self._rankDiff = None
         self._team1Conf = None
         self._team2Conf = None
@@ -129,8 +131,20 @@ class GameData:
                 teamTwoConf = 'NFC'
         return teamOneConf, teamTwoConf
     
+    def _getQuarterback_rating(self, boxscoreString):
+        """
+        Gets Quarterback rating from parsed info in boxscore.
+        """
+        maxRating = 0
+        boxscoreStats = self._boxscore._parse_players_stats(self._pyQuaryGame)
+        for player in boxscoreStats:
+            if(player['quarterback rating']) and float(player['quarterback rating']) > maxRating:
+                maxRating = float(player['quarterback rating'])
 
-    def _setGameValue(self, boxscoreString):
+        return maxRating
+
+
+    def _setGameValue(self):
         """
         Calculates the value of the game according to the algorithem.
         """
@@ -153,7 +167,7 @@ class GameData:
         self._diffYards = abs(self._boxscore.away_total_yards - self._boxscore.home_total_yards)
         self._totalMinPoss = int(self._boxscore.away_time_of_possession[0:2]) + int(self._boxscore.home_time_of_possession[0:2])
         self._diffMinPoss = abs(int(self._boxscore.away_time_of_possession[0:2]) - int(self._boxscore.home_time_of_possession[0:2]))
-
+        self._quarterback_rating_max = self._getQuarterback_rating()
 
         "first parameter"
         if(self._diffPoints == 0):
@@ -198,15 +212,15 @@ class GameData:
         
         "Eleventh parameter"
         #need to set parameters - now are arbitrary
-        if(self._game.quarterback_rating >= 75):
+        if(self._quarterback_rating_max >= 75):
              self.eleventhValue = 2.0
 
         "Twolth parameter"
         if(self._diffMinPoss / self._totalMinPoss) <= 0.05:
             self.twelthValue = 1.0
         
-        # Jonah - change accesible values like _gameValue to be public (without _)
-        self._gameValue = self.firstValue + self.secondValue + self.thirdValue + self.forthValue + self.fifthValue + self.sixthValue + self.seventhValue + self.eightValue + self.ninthValue + self.tenthValue + self.eleventhValue + self.twelthValue
+        # Jonah - change accesible values like _gameValue to be public (without _) - EDEN: FIXED
+        self.gameValue = self.firstValue + self.secondValue + self.thirdValue + self.forthValue + self.fifthValue + self.sixthValue + self.seventhValue + self.eightValue + self.ninthValue + self.tenthValue + self.eleventhValue + self.twelthValue
         
 
         
