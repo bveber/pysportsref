@@ -69,11 +69,11 @@ class GameData:
         self.firstValue = 0.0
         self.secondValue = 0.0
         self.thirdValue = 0.0
-        self.forthValue = 0.0
+        self.fourthValue = 0.0
         self.fifthValue = 0.0
         self.sixthValue = 0.0
         self.seventhValue = 0.0
-        self.eightValue = 0.0
+        self.eighthValue = 0.0
         self.ninthValue = 0.0
         self.tenthValue = 0.0
         self.eleventhValue = 0.0
@@ -185,7 +185,7 @@ class GameData:
 
         "forth parameter"
         if self._lastMinWin:
-            self.forthValue = 3.0
+            self.fourthValue = 3.0
 
         "fifth parameter"
         self.fifthValue = self._counterChangeLead / 2.0
@@ -200,7 +200,7 @@ class GameData:
 
         "Eighth parameter"
         if (self._percentageDiff >= 0.3 or self._rankDiff >= 8) and (self._winningTeam.rank > self._losingTeam.rank):
-            self.eightValue = 2.0
+            self.eighthValue = 2.0
 
         "Ninth parameter"
         if(self._team1Conf == self._team2Conf):
@@ -219,7 +219,7 @@ class GameData:
         if(self._diffMinPoss / self._totalMinPoss) <= 0.05:
             self.twelthValue = 1.0
         
-        self.gameValue = self.firstValue + self.secondValue + self.thirdValue + self.forthValue + self.fifthValue + self.sixthValue + self.seventhValue + self.eightValue + self.ninthValue + self.tenthValue + self.eleventhValue + self.twelthValue
+        self.gameValue = self.firstValue + self.secondValue + self.thirdValue + self.fourthValue + self.fifthValue + self.sixthValue + self.seventhValue + self.eighthValue + self.ninthValue + self.tenthValue + self.eleventhValue + self.twelthValue
         
 
         

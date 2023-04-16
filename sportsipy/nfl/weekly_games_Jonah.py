@@ -127,18 +127,27 @@ class TestWeeklyGames(unittest.TestCase):
             case '202211140phi': self.assertEqual(self.games.weekly_ratings[uri], 4.5, "Wrong rating for phi")
 
 
-if __name__ == '__main__':
-    suite = unittest.TestSuite()
-    #TestWeeklyGames.setUpClass()
+class TestSingleGame(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.game = GameData('202211130buf').gameValue
+
+    def test_game(self):
+        self.assertEqual(self.game, 19, "Wrong rating for buf game")
+
+def testWeek(suite):
     suite.addTest(TestWeeklyGames("test_weekly_games_simple"))
     suite.addTest(TestWeeklyGames("test_week_ratings"))
-    runner = unittest.TextTestRunner()  # reruns the setup (check the params here), erase?
+
+
+def testSingleGame(suite):
+    suite.addTest(TestSingleGame("test_game"))
+
+
+if __name__ == '__main__':
+    suite = unittest.TestSuite()
+    testWeek(suite)
+    testSingleGame(suite)
+    runner = unittest.TextTestRunner()  
     result = runner.run(suite)
     print(result)
-
-
-"""
-print(games.worth_watching_week)
-print("-------------------------------------------------")
-# print(games.worth_watching_last)
-"""
