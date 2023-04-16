@@ -79,7 +79,7 @@ class GameData:
         self.eleventhValue = 0.0
         self.twelthValue = 0.0
 
-        self._setGameValue(boxscoreString)
+        self._setGameValue()
 
     
     def _calGameScores(self):
@@ -131,7 +131,7 @@ class GameData:
                 teamTwoConf = 'NFC'
         return teamOneConf, teamTwoConf
     
-    def _getQuarterback_rating(self, boxscoreString):
+    def _getQuarterback_rating(self):
         """
         Gets Quarterback rating from parsed info in boxscore.
         """
@@ -219,7 +219,6 @@ class GameData:
         if(self._diffMinPoss / self._totalMinPoss) <= 0.05:
             self.twelthValue = 1.0
         
-        # Jonah - change accesible values like _gameValue to be public (without _) - EDEN: FIXED
         self.gameValue = self.firstValue + self.secondValue + self.thirdValue + self.forthValue + self.fifthValue + self.sixthValue + self.seventhValue + self.eightValue + self.ninthValue + self.tenthValue + self.eleventhValue + self.twelthValue
         
 
