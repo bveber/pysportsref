@@ -99,10 +99,7 @@ class GameData:
                 diffBefore = diffNow
         return lastMinScore, counterLeadChanges
                 
-                 
 
-   
-        
     def _inPlayoffPic(self):
         url = MAIN_URL
         isTeam1Playoff = False
@@ -220,13 +217,6 @@ class GameData:
             self.twelthValue = 1.0
         
         self.gameValue = self.firstValue + self.secondValue + self.thirdValue + self.fourthValue + self.fifthValue + self.sixthValue + self.seventhValue + self.eighthValue + self.ninthValue + self.tenthValue + self.eleventhValue + self.twelthValue
-        
-
-        
-
-        
-        
-             
 
 
 """
