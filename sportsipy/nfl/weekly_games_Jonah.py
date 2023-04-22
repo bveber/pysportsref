@@ -16,6 +16,7 @@ class WeeklyGames:
         self.weekly_ratings = {}
         self._get_week_boxscores(week, year)
         self._get_worth_watching()
+        self._qb_ratings = []  # for testing, TODO - remove
 
     def _get_week_boxscores(self, week, year):
         """Returns the boxscores from all the games in the past week"""
@@ -58,8 +59,10 @@ class WeeklyGames:
     def _if_worth_watching(self, boxscore):
         """Checks if the game is worth watching based on it's boxscore"""
         # print(boxscore.scoring)
-        check_game = GameData('', boxscore).gameValue
+        game = GameData('', boxscore)
+        check_game = game.gameValue
         self.weekly_ratings[boxscore._uri] = check_game
+        self._qb_ratings.append(game._quarterback_rating_max)  # TODO - for test, remove 
         print(str(check_game) + "game score")  # TODO - for test, remove
         if check_game >= 5:
             return True
