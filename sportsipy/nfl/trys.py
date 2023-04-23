@@ -4,7 +4,7 @@ from boxscore import Boxscores
 from roster import Roster
 from teams import Team
 from schedule import Schedule, Game
-#from game import GameData
+from game import GameData
 from constants import PARSING_SCHEME
 from sportsipy import utils
 
@@ -174,7 +174,8 @@ team_name1 = check_game._retrieve_html_page('202209180rai')
 team_name2 = check_game._parse_players_stats(team_name1)
 for player in team_name2:
     print(player['quarterback rating'])
-"""
+
+
 maxRating = 0
 check_game = Boxscore('202209180rai')
 team_name1 = check_game._retrieve_html_page('202209180rai')
@@ -183,4 +184,17 @@ for player in team_name2:
             if(player['quarterback rating']) and float(player['quarterback rating']) > maxRating:
                 maxRating = float(player['quarterback rating'])
 
-print(maxRating)
+print(maxRating)    
+
+
+check_game = Boxscore('202211130chi')
+team_name1 = check_game._retrieve_html_page('202211130chi')
+team_name2 = check_game._parse_scoring(team_name1)
+print(int(team_name2[3][-1]['current_score']['away']))
+print(check_game.away_abbreviation.upper())
+print(check_game.losing_abbr)
+
+"""
+
+check_game = GameData('202211130chi')
+print(check_game.gameValue)
