@@ -82,6 +82,7 @@ BOXSCORE_SCHEME = {
     'home_name': 'div[class="linescore_wrap"] table tbody tr:last td:nth-child(2)',
     'summary': 'table[class="linescore nohover stats_table no_freeze"]:first',
     'scoring': 'table[class="stats_table"]:first',
+    'scorebox': 'div[class="scorebox"]:first',
     'player_stats': 'table[class="sortable stats_table"]',
     'team_stats': 'table#team_stats thead',
     'away_name': 'div[class="linescore_wrap"] table tbody tr:first td:nth-child(2)',

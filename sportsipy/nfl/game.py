@@ -52,6 +52,8 @@ class GameData:
         self._totalPoints = None
         self._thirdQuarterAway = None
         self._thirdQuarterHome = None
+        self._actualwinningTeam = None
+        self._actuallosingTeam = None
         self._diffThird = None
         self._diffPoints = None
         self._isOvertime = None
@@ -141,6 +143,20 @@ class GameData:
                 maxRating = float(player['quarterback rating'])
 
         return maxRating
+    
+    def getWinTeam(self):
+        """
+        return the actual winning team of the game currectly
+        """
+
+        scoring = self._boxscore._parse_scoring(self._pyQuaryGame)
+        if(int(scoring[3][-1]['current_score']['away']) > int(scoring[3][-1]['current_score']['home'])):
+            self._actualwinningTeam = Team(self._boxscore.away_abbreviation.upper())
+            self._actuallosingTeam = Team(self._boxscore.home_abbreviation.upper())
+        else:
+            self._actualwinningTeam = Team(self._boxscore.home_abbreviation.upper())
+            self._actuallosingTeam = Team(self._boxscore.away_abbreviation.upper())
+
 
 
     def _setGameValue(self):
@@ -167,6 +183,7 @@ class GameData:
         self._totalMinPoss = int(self._boxscore.away_time_of_possession[0:2]) + int(self._boxscore.home_time_of_possession[0:2])
         self._diffMinPoss = abs(int(self._boxscore.away_time_of_possession[0:2]) - int(self._boxscore.home_time_of_possession[0:2]))
         self._quarterback_rating_max = self._getQuarterback_rating()
+        self.getWinTeam()
 
         "first parameter"
         if(self._diffPoints == 0):
@@ -198,8 +215,9 @@ class GameData:
             self.seventhValue = 2.0
 
         "Eighth parameter"
-        if (self._percentageDiff >= 0.3 or self._rankDiff >= 8) and (self._winningTeam.rank > self._losingTeam.rank):
-            self.eighthValue = 2.0
+        "let us know that if there are problems with this parameter than it is because there are problems with away and home team names in boxscore --> need to parse data"
+        if (self._percentageDiff >= 0.3 or self._rankDiff >= 8) and (self._actualwinningTeam.rank > self._actuallosingTeam.rank):
+            self.eightValue = 2.0
 
         "Ninth parameter"
         if(self._team1Conf == self._team2Conf):
