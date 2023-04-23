@@ -1,4 +1,3 @@
-import datetime
 import unittest
 from nfl.weekly_games_Jonah import WeeklyGames
 from nfl.game import GameData

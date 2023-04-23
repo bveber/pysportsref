@@ -1,5 +1,4 @@
 import datetime
-import unittest
 from nfl.boxscore import Boxscores, Boxscore
 from nfl.game import GameData
 

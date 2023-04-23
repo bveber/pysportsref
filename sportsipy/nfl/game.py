@@ -24,6 +24,8 @@ class GameData:
     Furtermore, the game will add in the future additional information about the game and will calculate the 'Value' of the game according to the Parameters the game checks out.
     """
 
+    # TODO - add weights to the parameters
+    # TODO - add functions for the threshholds of the ranking parameters
     def __init__(self, boxscoreString, game_box_score=None):
         if (game_box_score is None):
             self._boxscore = Boxscore(boxscoreString)
@@ -33,7 +35,7 @@ class GameData:
         team_schedule = Schedule(team_name1)
         if (boxscoreString is not None):
             boxscoreString = self._boxscore._uri
-        for game in team_schedule:  # Jonah - is this the most efficient way to get the game? -EDEN: unfortunatly, yes ( absulotly we need to find another way)
+        for game in team_schedule:  # TODO - change to a more efficient way to find the game - overtime - use _parse_summary
             if game.boxscore_index == boxscoreString:
                 self._game = game
         #self._game = Game(game_data, game_type, year) - game_data = None, game_type= None, year= None
@@ -154,7 +156,7 @@ class GameData:
         self._thirdQuarterHome = sum(self._gameSummary['home'][:3])
         self._diffThird = abs(self._thirdQuarterHome - self._thirdQuarterAway)
         self._diffPoints = abs(self._homePoints - self._awayPoints)
-        self._isOvertime = self._game.overtime
+        self._isOvertime = self._game.overtime  # TODO - only usage from Schedule and not Boxscore 
         self._lastMinWin, self._counterChangeLead = self._calGameScores()
         self._isTeamOnePlayoffs, self._isTeamTwoPlayoffs = self._inPlayoffPic()
         self._percentageDiff = abs(self._winningTeam.win_percentage - self._losingTeam.win_percentage)
