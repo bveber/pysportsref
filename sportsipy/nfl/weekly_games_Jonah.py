@@ -14,9 +14,10 @@ class WeeklyGames:
         self.worth_watching_week = []
         self.today_date = datetime.date.today()
         self.weekly_ratings = {}
+        self._qb_ratings = []  # for testing, TODO - remove
         self._get_week_boxscores(week, year)
         self._get_worth_watching()
-        self._qb_ratings = []  # for testing, TODO - remove
+        
 
     def _get_week_boxscores(self, week, year):
         """Returns the boxscores from all the games in the past week"""
