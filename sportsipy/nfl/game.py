@@ -228,9 +228,9 @@ class GameData:
             self.tenthValue = 2.0
         
         "Eleventh parameter"
-        #need to set parameters - now are arbitrary
-        if(self._quarterback_rating_max >= 75):
-             self.eleventhValue = 2.0
+        if(self._quarterback_rating_max >= 130):
+            print("qb passed threshhold of 130" + self._boxscore.uri) 
+            self.eleventhValue = 2.0
 
         "Twelfth parameter"
         if(self._diffMinPoss / self._totalMinPoss) <= 0.05:
