@@ -229,7 +229,7 @@ class GameData:
         
         "Eleventh parameter"
         if(self._quarterback_rating_max >= 130):
-            print("qb passed threshhold of 130" + self._boxscore.uri) 
+            print("qb passed threshhold of 130 - game: " + self._boxscore.winning_name + " " + self._boxscore.losing_name) 
             self.eleventhValue = 2.0
 
         "Twelfth parameter"
