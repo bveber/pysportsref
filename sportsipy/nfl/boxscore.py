@@ -3,15 +3,15 @@ import re
 from datetime import datetime
 from pyquery import PyQuery as pq
 from urllib.error import HTTPError
-from .. import utils
-from ..constants import AWAY, HOME
-from ..decorators import int_property_decorator
-from .constants import (BOXSCORE_ELEMENT_INDEX,
+import utils
+from sportsipy.constants import HOME, AWAY
+from sportsipy.decorators import int_property_decorator
+from constants import (BOXSCORE_ELEMENT_INDEX,
                         BOXSCORE_ELEMENT_SUB_INDEX,
                         BOXSCORE_SCHEME,
                         BOXSCORE_URL,
                         BOXSCORES_URL)
-from .player import (AbstractPlayer,
+from player import (AbstractPlayer,
                      _float_property_decorator,
                      _int_property_decorator)
 from functools import wraps
@@ -238,6 +238,7 @@ class Boxscore:
         self._losing_name = None
         self._losing_abbr = None
         self._summary = None
+        self._scoring = None
         self._won_toss = None
         self._roof = None
         self._surface = None
@@ -490,7 +491,125 @@ class Boxscore:
                 except ValueError:
                     summary[team[ind]].append(None)
         return summary
+    
+    def _parse_players_stats(self, boxscore): 
 
+        """    
+        Find the details of the Passing, Rushing, & Receiving stats of the players in the game.
+
+        The info includes details on every player stats and rating (for some) in the game
+        stats are for the entire game and contains details on the players involved in the 
+        game. The final output will be a list of lists, where each sub-list will hold each player's all
+        stats in game (Yards, Passes, Interceptions..)
+        all stats are devided by roll of player - Passing, Rushing and Receiving
+        Each stats will be represented with a dictionary with the keys:
+            'Passing' - Time on the clock until the end of the quarter.
+            'team' - The scoring team's name.
+            'details' - A summary of the scoring play,
+                        including players involved.
+            'current_score' - A dictionary with the current score after the 
+                            scoring play. It's keys are: 'home', 'away'.
+        
+        Parameters
+        ----------
+        boxscore : PyQuery object
+            A PyQuery object containing all of the HTML from the boxscore.
+
+        Returns
+        -------
+        list
+            Returns a ``list`` containing a list for each player's stats. 
+            Each player is represented by a "dictionary" which holds his details
+            on each score.
+        
+        """
+    
+        #first part - create the exact number of columns for the players in the game
+        players_stats = []
+        counter_players = 0
+        game_players_stats = boxscore(BOXSCORE_SCHEME['player_stats']).eq(1)
+        for player_column in game_players_stats('tbody tr').items():
+            player_name = player_column('th[data-stat="player"]').text() 
+            if( player_name != 'Player' and player_name != ''):
+                player = {}
+                player['player'] = player_column('th[data-stat="player"]').text()
+                player['team'] = player_column('th[data-stat="team"]').text()
+                player['passes completed'] = player_column('td[data-stat="pass_cmp"]').text()
+                player['passes attempted'] = player_column('td[data-stat="pass_att"]').text()
+                player['yards by passing'] = player_column('td[data-stat="pass_yds"]').text()
+                player['passing touchdowns'] = player_column('td[data-stat="pass_td"]').text()
+                player['interceptions thrown'] = player_column('td[data-stat="pass_int"]').text()
+                player['times sacked'] = player_column('td[data-stat="pass_sacked"]').text()
+                player['yards lost by sacked'] = player_column('td[data-stat="pass_sacked_yds"]').text()
+                player['longest completed pass'] = player_column('td[data-stat="pass_long"]').text()
+                player['yards lost by sacked'] = player_column('td[data-stat="pass_sacked_yds"]').text()
+                player['quarterback rating'] = player_column('td[data-stat="pass_rating"]').text()
+                player['rushing attempts'] = player_column('td[data-stat="rush_att"]').text()
+                player['rushing yards'] = player_column('td[data-stat="rush_yds"]').text()
+                player['rushing touchdown'] = player_column('td[data-stat="rush_td"]').text()
+                player['longest rushing attempt'] = player_column('td[data-stat="rush_long"]').text()
+                player['pass targets'] = player_column('td[data-stat="targets"]').text()
+                player['receptions'] = player_column('td[data-stat="rec"]').text()
+                player['receiving yards'] = player_column('td[data-stat="rec_yds"]').text()
+                player['receiving touchdown'] = player_column('td[data-stat="rec_td"]').text()
+                player['longest receptions'] = player_column('td[data-stat="rec_long"]').text()
+                player['fumbles and taken by own team'] = player_column('td[data-stat="fumbles"]').text()
+                player['fumbles and taken by own team'] = player_column('td[data-stat="fumbles_lost"]').text()
+
+                players_stats.append(player)
+                counter_players += 1
+#        print(game_players_stats)
+        return players_stats
+
+
+    def _parse_scoring(self, boxscore): 
+        """
+        Find the details of the game's scorig possessions.
+
+        The game scoring info includes details on every scoring possession
+        split by quarters with details on the players involved in the 
+        possession and the game score after the scoring play. The final output 
+        will be a list of lists, where each sub-list will hold all scoring 
+        possessions in it's quarter: 0-1st, 1-2nd, 2-3rd, 3-4th, 4-overtime.
+        Each score will be represented with a dictionary with the keys:
+            'time' - Time on the clock until the end of the quarter.
+            'team' - The scoring team's name.
+            'details' - A summary of the scoring play,
+                        including players involved.
+            'current_score' - A dictionary with the current score after the 
+                            scoring play. It's keys are: 'home', 'away'.
+        
+        Parameters
+        ----------
+        boxscore : PyQuery object
+            A PyQuery object containing all of the HTML from the boxscore.
+
+        Returns
+        -------
+        list
+            Returns a ``list`` containing a list for each quarter's scores. 
+            Each score is represented by a "dictionary" which holds the details
+            on each score.
+        """
+        scoring = [[], [], [], [], []] 
+        game_scoring = boxscore(BOXSCORE_SCHEME['scoring'])
+
+        for score_info in game_scoring('tbody tr').items(): 
+            if score_info('th[data-stat="quarter"]').text().isnumeric():
+                quarter = int(score_info('th[data-stat="quarter"]').text())
+            score = {}
+            score['time'] = score_info('td[data-stat="time"]').text()
+            score['team'] = score_info('td[data-stat="team"]').text()
+            score['details'] = score_info('td[data-stat="description"]').text()
+            current_score = {}
+            current_score['away'] = score_info('td[data-stat="vis_team_score"]').text() 
+            current_score['home'] = score_info('td[data-stat="home_team_score"]').text()
+            score['current_score'] = current_score
+            scoring[quarter-1].append(score)
+#        print(scoring)
+        return scoring
+    
+    
     def _find_boxscore_tables(self, boxscore):
         """
         Find all tables with boxscore information on the page.
@@ -788,6 +907,10 @@ class Boxscore:
                 value = self._parse_summary(boxscore)
                 setattr(self, field, value)
                 continue
+            if short_field == 'scoring':
+                value = self._parse_scoring(boxscore)
+                setattr(self, field, value)
+                continue
             index = 0
             if short_field in BOXSCORE_ELEMENT_INDEX.keys():
                 index = BOXSCORE_ELEMENT_INDEX[short_field]
@@ -1022,6 +1145,39 @@ class Boxscore:
         }
         """
         return self._summary
+
+    @property
+    def scoring(self):
+        """
+        Returns a "list" containing a list for each quarter's scores. Each
+        score is represented by a "dictionary" that holds the following keys:
+            'time' - Time on the clock until the end of the quarter.
+            'team' - The scoring team's name.
+            'details' - A summary of the scoring play,
+                        including players involved.
+            'current_score' - A dictionary with the current score after the 
+                            scoring play. It's keys are: 'home', 'away'.
+        For example:
+        
+        [
+            [<1st-quarter-scores>], [<2nd-quarter-scores>], 
+            [<3rd-quarter-scores>], [<4th-quarter-scores>],
+            [<overtime-scores>] 
+        ]
+
+        Example for <1st-quarter-scores>:
+            
+            [
+                {
+                    'time': '7:51',
+                    'team': 'Giants', 
+                    'details': 'Lawrence Cager 9 yard pass from Daniel Jones
+                      (Graham Gano kick)',
+                    'current_score': {'away': '0', 'home': '7'}
+                }
+            ]
+        """
+        return self._scoring
 
     @property
     def winner(self):
@@ -1813,3 +1969,7 @@ class Boxscores:
             timestamp = '%s-%s' % (week, year)
             self._boxscores[timestamp] = boxscores
             week += 1
+
+
+
+

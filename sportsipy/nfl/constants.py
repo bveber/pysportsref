@@ -35,7 +35,8 @@ PARSING_SCHEME = {
     'first_downs_from_penalties': 'td[data-stat="pen_fd"]:first',
     'percent_drives_with_points': 'td[data-stat="score_pct"]:first',
     'percent_drives_with_turnovers': 'td[data-stat="turnover_pct"]:first',
-    'points_contributed_by_offense': 'td[data-stat="exp_pts_tot"]:first'
+    'points_contributed_by_offense': 'td[data-stat="exp_pts_tot"]:first',
+    'NFC Team' : 'df_list[1]["Tm"][i][0:3]'
 }
 
 SCHEDULE_SCHEME = {
@@ -80,6 +81,9 @@ BOXSCORE_SCHEME = {
     'game_details': 'table#game_info tr',
     'home_name': 'div[class="linescore_wrap"] table tbody tr:last td:nth-child(2)',
     'summary': 'table[class="linescore nohover stats_table no_freeze"]:first',
+    'scoring': 'table[class="stats_table"]:first',
+    'scorebox': 'div[class="scorebox"]:first',
+    'player_stats': 'table[class="sortable stats_table"]',
     'team_stats': 'table#team_stats thead',
     'away_name': 'div[class="linescore_wrap"] table tbody tr:first td:nth-child(2)',
     'away_points': 'div[class="scorebox"] div[class="score"]',
